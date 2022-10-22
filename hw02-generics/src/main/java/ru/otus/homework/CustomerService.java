@@ -13,12 +13,8 @@ public class CustomerService {
     public Map.Entry<Customer, String> getSmallest() {
         //Возможно, чтобы реализовать этот метод, потребуется посмотреть как Map.Entry сделан в jdk
         Map.Entry<Customer, String> customerEntry = treeMap.firstEntry();
-        Customer temp = new Customer(
-                customerEntry.getKey().getId(),
-                customerEntry.getKey().getName(),
-                customerEntry.getKey().getScores());
 
-        return Map.entry(temp, customerEntry.getValue());
+        return Map.entry(customerEntry.getKey().copy(), customerEntry.getValue());
     }
 
     public Map.Entry<Customer, String> getNext(Customer customer) {
@@ -26,12 +22,8 @@ public class CustomerService {
         if (customerEntry == null) {
             return null;
         }
-        Customer temp = new Customer(
-                customerEntry.getKey().getId(),
-                customerEntry.getKey().getName(),
-                customerEntry.getKey().getScores());
 
-        return Map.entry(temp, customerEntry.getValue());
+        return Map.entry(customerEntry.getKey().copy(), customerEntry.getValue());
     }
 
     public void add(Customer customer, String data) {

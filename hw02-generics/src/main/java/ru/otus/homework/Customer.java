@@ -15,6 +15,10 @@ public class Customer {
         this.scores = scores;
     }
 
+    public Customer copy() {
+        return new Customer(this.id, this.name, this.scores);
+    }
+
     public long getId() {
         return id;
     }
@@ -37,11 +41,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", scores=" + scores +
-                '}';
+        return "Customer{" + "id=" + id + ", name='" + name + '\'' + ", scores=" + scores + '}';
     }
 
     @Override
