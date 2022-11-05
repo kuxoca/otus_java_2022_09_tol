@@ -19,12 +19,12 @@ public class Hw03 {
     private static Map<Class, Set<Method>> getAnnotatedMethods(String clazzName) throws ClassNotFoundException {
         var methods = Class.forName(clazzName).getDeclaredMethods();
 
-        Set<Method> setBefore = new HashSet<>();
+        Set<Method> beforeSet = new HashSet<>();
         Set<Method> setAfter = new HashSet<>();
         Set<Method> setTest = new HashSet<>();
         for (Method method : methods) {
             if (method.isAnnotationPresent(Before.class)) {
-                setBefore.add(method);
+                beforeSet.add(method);
             }
             if (method.isAnnotationPresent(After.class)) {
                 setAfter.add(method);
@@ -37,7 +37,7 @@ public class Hw03 {
 
         map.put(Test.class, setTest);
         map.put(After.class, setAfter);
-        map.put(Before.class, setBefore);
+        map.put(Before.class, beforeSet);
         return map;
     }
 
