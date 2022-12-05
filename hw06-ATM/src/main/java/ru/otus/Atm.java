@@ -1,7 +1,7 @@
 package ru.otus;
 
-public class ATM {
+public class Atm {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        System.out.println("ATM");
     }
 }
