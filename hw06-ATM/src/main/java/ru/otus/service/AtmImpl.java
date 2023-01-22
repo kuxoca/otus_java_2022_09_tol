@@ -37,14 +37,12 @@ public class AtmImpl implements Atm {
         if (cassette.isEmpty()) {
             throw new Myexception("В ATM нет ячеек для приема банкнот");
         }
-        cash.getCash().forEach((k, v) -> {
-            service.getCellByBanknoteType(k, cassette).addBanknote(v);
-        });
+        cash.getCash().forEach((k, v) ->
+                service.getCellByBanknoteType(k, cassette).addBanknote(v));
     }
 
     @Override
     public Cash withdraw(Long expectedAmount) {
-
         return service.withdraw(expectedAmount, cassette);
     }
 

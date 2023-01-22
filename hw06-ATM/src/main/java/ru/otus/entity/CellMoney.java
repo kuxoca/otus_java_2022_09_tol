@@ -1,16 +1,20 @@
 package ru.otus.entity;
 
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 import ru.otus.exception.Myexception;
 
-import java.util.Objects;
-
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@Setter
+@ToString
 public class CellMoney {
-    private Banknote banknote;
-    private Long count;
-
-    private CellMoney() {
-    }
+    final Banknote banknote;
+    Long count;
 
     public CellMoney(Banknote banknote) {
         this.banknote = banknote;
@@ -38,30 +42,8 @@ public class CellMoney {
         return banknote;
     }
 
-
     public Long getCountBanknote() {
         return count;
-    }
-
-    @Override
-    public String toString() {
-        return "CellMoney{" +
-                "banknote=" + banknote +
-                ", count=" + count +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CellMoney cellMoney = (CellMoney) o;
-        return banknote == cellMoney.banknote && Objects.equals(count, cellMoney.count);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(banknote, count);
     }
 
     public Long getAvailableAmount() {

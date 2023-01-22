@@ -37,7 +37,7 @@ class AtmTest {
     @DisplayName("Тест снятия наличных - удачное снятие")
     @Test
     void withdraw1() {
-        atm = new AtmImpl(service, false);
+        atm = new AtmImpl(service);
         assertThat(atm.withdraw(5550L).getCash())
                 .containsEntry(Banknote.BANKNOTE5000, 1L)
                 .containsEntry(Banknote.BANKNOTE100, 5L)

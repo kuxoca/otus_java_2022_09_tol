@@ -53,9 +53,4 @@ class CellMoneyTest {
         assertThat(cellMoney.getBanknoteType()).isEqualTo(Banknote.BANKNOTE1000);
         assertThat(cellMoney1.getBanknoteType()).isEqualTo(Banknote.BANKNOTE5000);
     }
-
-    @Test
-    void getCountBanknote() {
-
-    }
 }
