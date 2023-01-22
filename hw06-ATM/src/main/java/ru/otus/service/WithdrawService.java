@@ -1,10 +1,8 @@
 package ru.otus.service;
 
-import ru.otus.entity.WithdrawMoney;
-
-import java.util.List;
+import ru.otus.entity.Cash;
 
 public interface WithdrawService {
-    List<WithdrawMoney> withdraw(Long expectedAmount);
+    Cash withdrawCash(Long expectedAmount);
 
 }

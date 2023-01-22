@@ -1,55 +1,66 @@
 package ru.otus;
 
 import ru.otus.entity.Banknote;
+import ru.otus.entity.Cash;
+import ru.otus.entity.Cassette;
 import ru.otus.entity.CellMoney;
-import ru.otus.entity.WithdrawMoney;
 import ru.otus.exception.Myexception;
-import ru.otus.service.DepositService;
-import ru.otus.service.InformationService;
-import ru.otus.service.SupportService;
-import ru.otus.service.WithdrawService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class Atm implements InformationService, DepositService, WithdrawService, SupportService {
-    private final List<CellMoney> cells = new ArrayList<>();
+public class AtmOld {
+//    private final List<CellMoney> cells = new ArrayList<>();
 
+    public Cassette getCassette() {
+        return cassette;
+    }
+
+    public void setCassette(Cassette cassette) {
+        this.cassette = cassette;
+    }
+
+    private Cassette cassette;
+
+    public AtmOld(Cassette cassette) {
+        this.cassette = cassette;
+    }
 
     public CellMoney getCellByBanknoteType(Banknote type) {
-        return cells.stream().filter(el -> el.getBanknoteType().equals(type))
-                .findFirst().orElseThrow();
+        return cassette.getCassette().stream().filter(el -> el.getBanknoteType().equals(type))
+                .findFirst().orElseThrow(() -> new Myexception("В ATM нет ячееки для приема этого наминала банкнот: " + type.toString()));
     }
 
-    @Override
-    public void depositMoney(Banknote banknote, Long count) {
-        if (cells.isEmpty()) {
+    public void depositCash(Cash cash) {
+        if (cassette.getCassette().isEmpty()) {
             throw new Myexception("В ATM нет ячеек для приема этого наминала банкнот");
         }
-        getCellByBanknoteType(banknote).addBanknote(count);
+        cash.getCash().forEach((k, v) -> {
+            getCellByBanknoteType(k).addBanknote(v);
+        });
     }
 
-    @Override
-    public List<WithdrawMoney> withdraw(Long expectedAmount) {
+    public Cash withdrawCash(Long expectedAmount) {
+        Cash cash = new Cash();
+        Map<Banknote, Long> map = cash.getCash();
+
         if (this.getAvailableAmount() < expectedAmount) {
             throw new Myexception("недостаточно средств");
         } else {
-            List<WithdrawMoney> moneyList = new ArrayList<>();
-            cells.sort(Comparator.comparingInt(o -> o.getBanknoteType().getDenomination()));
-            Collections.reverse(cells);
+            cassette.getCassette().sort(Comparator.comparingInt(o -> o.getBanknoteType().getDenomination()));
+            Collections.reverse(cassette.getCassette());
 
-            for (CellMoney cell : cells) {
+            for (CellMoney cell : cassette.getCassette()) {
                 long x = expectedAmount / cell.getBanknoteType().getDenomination();
                 if (x > 0) {
                     if (cell.getCountBanknote() >= x) {
                         expectedAmount -= (cell.getBanknoteType().getDenomination() * x);
-                        moneyList.add(new WithdrawMoney(cell.getBanknoteType(), x));
+                        map.put(cell.getBanknoteType(), x);
+//                        moneyList.add(new WithdrawMoney(cell.getBanknoteType(), x));
                         cell.takeBanknote(x);
                     } else {
                         expectedAmount -= cell.getBanknoteType().getDenomination() * cell.getCountBanknote();
-                        moneyList.add(new WithdrawMoney(cell.getBanknoteType(), cell.getCountBanknote()));
+                        map.put(cell.getBanknoteType(), cell.getCountBanknote());
+//                        moneyList.add(new WithdrawMoney(cell.getBanknoteType(), cell.getCountBanknote()));
                         cell.takeBanknote(cell.getCountBanknote());
                     }
                 }
@@ -61,44 +72,41 @@ public class Atm implements InformationService, DepositService, WithdrawService,
             if (expectedAmount != 0) {
                 throw new Myexception("Не удалось снять деньги");
             }
-            return moneyList;
+            return cash;
         }
     }
 
 
-    @Override
     public Long getAvailableAmount() {
-        return cells.stream().mapToLong(CellMoney::getAvailableAmount).sum();
+        return cassette.getCassette().stream().mapToLong(CellMoney::getAvailableAmount).sum();
 //        return cells.stream().mapToLong(el -> el.getBanknoteType().getDenomination() * el.getCountBanknote()).sum();
     }
 
 
-    @Override
     public void initializeWithEmptyCellsForMoney() {
+        List<CellMoney> cells = new ArrayList<>();
         cells.add(new CellMoney(Banknote.BANKNOTE5000, 0L));
         cells.add(new CellMoney(Banknote.BANKNOTE1000, 0L));
         cells.add(new CellMoney(Banknote.BANKNOTE100, 0L));
         cells.add(new CellMoney(Banknote.BANKNOTE100, 0L));
         cells.add(new CellMoney(Banknote.BANKNOTE10, 0L));
+        cassette.setCassette(cells);
     }
 
-    @Override
     public void initializeWithFilledCellsWithMoney() {
+        List<CellMoney> cells = new ArrayList<>();
         cells.add(new CellMoney(Banknote.BANKNOTE5000, 5L));
         cells.add(new CellMoney(Banknote.BANKNOTE1000, 10L));
         cells.add(new CellMoney(Banknote.BANKNOTE100, 20L));
         cells.add(new CellMoney(Banknote.BANKNOTE100, 25L));
         cells.add(new CellMoney(Banknote.BANKNOTE10, 3L));
-    }
-
-    public List<CellMoney> getCells() {
-        return cells;
+        cassette.setCassette(cells);
     }
 
     @Override
     public String toString() {
         return "Atm{" +
-                "cells=" + cells +
+                "cassette=" + cassette +
                 '}';
     }
 }

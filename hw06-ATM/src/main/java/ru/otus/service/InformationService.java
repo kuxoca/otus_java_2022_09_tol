@@ -1,5 +1,8 @@
 package ru.otus.service;
 
+
+import ru.otus.AtmOld;
+
 public interface InformationService {
-    Long getAvailableAmount();
+    Long getAvailableAmount(AtmOld atmOld);
 }

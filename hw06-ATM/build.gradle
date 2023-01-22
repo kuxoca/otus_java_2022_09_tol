@@ -12,6 +12,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter'
 //    testImplementation 'org.junit.jupiter:junit-jupiter-api'
 //    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 test {

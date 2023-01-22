@@ -2,12 +2,10 @@ package ru.otus.entity;
 
 
 import ru.otus.exception.Myexception;
-import ru.otus.service.CellMoneyService;
-import ru.otus.service.InformationService;
 
 import java.util.Objects;
 
-public class CellMoney implements CellMoneyService, InformationService {
+public class CellMoney {
     private Banknote banknote;
     private Long count;
 
@@ -24,12 +22,10 @@ public class CellMoney implements CellMoneyService, InformationService {
         this.count = count;
     }
 
-    @Override
     public void addBanknote(Long add) {
         count += add;
     }
 
-    @Override
     public void takeBanknote(Long take) {
         if (count < take) {
             throw new Myexception("недостаточно банкнот");
@@ -38,13 +34,11 @@ public class CellMoney implements CellMoneyService, InformationService {
         }
     }
 
-    @Override
     public Banknote getBanknoteType() {
         return banknote;
     }
 
 
-    @Override
     public Long getCountBanknote() {
         return count;
     }
@@ -70,7 +64,6 @@ public class CellMoney implements CellMoneyService, InformationService {
         return Objects.hash(banknote, count);
     }
 
-    @Override
     public Long getAvailableAmount() {
         return banknote.getDenomination() * count;
     }

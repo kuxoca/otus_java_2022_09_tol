@@ -1,7 +1,18 @@
 package ru.otus.service;
 
-public interface SupportService {
-    void initializeWithEmptyCellsForMoney();
+import ru.otus.entity.Banknote;
+import ru.otus.entity.Cash;
+import ru.otus.entity.Cassette;
+import ru.otus.entity.CellMoney;
 
-    void initializeWithFilledCellsWithMoney();
+public interface SupportService {
+    Cassette initializeWithEmptyCellsForMoney();
+
+    Cassette initializeWithFilledCellsWithMoney();
+
+    CellMoney getCellByBanknoteType(Banknote type, Cassette cassette);
+
+    Long getAvailableAmount(Cassette cassette);
+
+    Cash withdraw(Long expectedAmount, Cassette cassette);
 }

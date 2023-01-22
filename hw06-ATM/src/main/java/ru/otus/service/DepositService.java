@@ -1,8 +1,8 @@
 package ru.otus.service;
 
-import ru.otus.entity.Banknote;
+import ru.otus.entity.Cash;
 
 public interface DepositService {
-    void depositMoney(Banknote banknote, Long count);
+    void depositCash(Cash cash);
 
 }
