@@ -29,7 +29,6 @@ public class AtmImpl implements Atm {
     public AtmImpl(SupportService service) {
         this.service = service;
         this.cassette = service.initializeWithFilledCellsWithMoney();
-
     }
 
     @Override
@@ -37,8 +36,7 @@ public class AtmImpl implements Atm {
         if (cassette.isEmpty()) {
             throw new Myexception("В ATM нет ячеек для приема банкнот");
         }
-        cash.getCash().forEach((k, v) ->
-                service.getCellByBanknoteType(k, cassette).addBanknote(v));
+        service.deposit(cash, cassette);
     }
 
     @Override
@@ -49,7 +47,6 @@ public class AtmImpl implements Atm {
     @Override
     public Long getAvailableAmount() {
         return service.getAvailableAmount(cassette);
-
     }
 }
 

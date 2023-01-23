@@ -31,8 +31,8 @@ public class SupportServiceImpl implements SupportService {
         return new Cassette(cells);
     }
 
-    @Override
-    public CellMoney getCellByBanknoteType(Banknote type, Cassette cassette) {
+    //    @Override
+    private CellMoney getCellByBanknoteType(Banknote type, Cassette cassette) {
         return cassette.getCassette().stream().filter(el -> el.getBanknoteType().equals(type))
                 .findFirst().orElseThrow(() -> new Myexception("В ATM нет ячееки для приема этого наминала банкнот: " + type.toString()));
     }
@@ -44,15 +44,13 @@ public class SupportServiceImpl implements SupportService {
 
     @Override
     public Cash withdraw(Long expectedAmount, Cassette cassette) {
-        Cash cash = new Cash();
-        Map<Banknote, Long> map = cash.getCash();
-
         if (this.getAvailableAmount(cassette) < expectedAmount) {
             throw new Myexception("недостаточно средств");
         } else {
+            Cash cash = new Cash();
+            Map<Banknote, Long> map = cash.getCash();
             cassette.getCassette().sort(Comparator.comparingInt(o -> o.getBanknoteType().getDenomination()));
             Collections.reverse(cassette.getCassette());
-
             for (CellMoney cell : cassette.getCassette()) {
                 long x = expectedAmount / cell.getBanknoteType().getDenomination();
                 if (x > 0) {
@@ -69,12 +67,17 @@ public class SupportServiceImpl implements SupportService {
                 if (expectedAmount == 0) {
                     break;
                 }
-
             }
             if (expectedAmount != 0) {
                 throw new Myexception("Не удалось снять деньги");
             }
             return cash;
         }
+    }
+
+    @Override
+    public void deposit(Cash cash, Cassette cassette) {
+        cash.getCash().forEach((k, v) ->
+                getCellByBanknoteType(k, cassette).addBanknote(v));
     }
 }
