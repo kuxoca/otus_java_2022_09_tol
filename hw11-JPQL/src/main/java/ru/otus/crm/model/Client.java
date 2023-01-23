@@ -11,9 +11,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "client")
 public class Client implements Cloneable {
 
