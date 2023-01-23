@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.entity.Banknote;
 import ru.otus.entity.CellMoney;
-import ru.otus.exception.Myexception;
+import ru.otus.exception.MyException;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,7 +42,7 @@ class CellMoneyTest {
     void takeBanknote2() {
         cellMoney = new CellMoney(Banknote.BANKNOTE1000);
         cellMoney.addBanknote(10L);
-        assertThrows(Myexception.class, () -> cellMoney.takeBanknote(13L));
+        assertThrows(MyException.class, () -> cellMoney.takeBanknote(13L));
     }
 
     @DisplayName("Проверка на получение банкноты нужнного наминала")

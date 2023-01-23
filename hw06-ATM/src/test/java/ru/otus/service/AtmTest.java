@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.entity.Banknote;
 import ru.otus.entity.Cash;
-import ru.otus.exception.Myexception;
+import ru.otus.exception.MyException;
 
 import java.util.Collections;
 
@@ -31,7 +31,7 @@ class AtmTest {
         atm = new AtmImpl(service, true);
         Cash cash = new Cash();
         cash.setCash(Collections.singletonMap(Banknote.BANKNOTE500, 1L));
-        assertThrows(Myexception.class, () -> atm.deposit(cash));
+        assertThrows(MyException.class, () -> atm.deposit(cash));
     }
 
     @DisplayName("Тест снятия наличных - удачное снятие")
@@ -48,7 +48,7 @@ class AtmTest {
     @Test
     void withdraw2() {
         atm = new AtmImpl(service, false);
-        assertThrows(Myexception.class, () -> atm.withdraw(5590L));
+        assertThrows(MyException.class, () -> atm.withdraw(5590L));
     }
 
     @DisplayName("Тест проверки остатка")

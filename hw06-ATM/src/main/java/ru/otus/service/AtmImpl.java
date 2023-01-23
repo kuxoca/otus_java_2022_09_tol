@@ -7,7 +7,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.otus.entity.Cash;
 import ru.otus.entity.Cassette;
-import ru.otus.exception.Myexception;
+import ru.otus.exception.MyException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -34,7 +34,7 @@ public class AtmImpl implements Atm {
     @Override
     public void deposit(Cash cash) {
         if (cassette.isEmpty()) {
-            throw new Myexception("В ATM нет ячеек для приема банкнот");
+            throw new MyException("В ATM нет ячеек для приема банкнот");
         }
         service.deposit(cash, cassette);
     }

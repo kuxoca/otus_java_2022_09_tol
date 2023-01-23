@@ -4,7 +4,7 @@ import ru.otus.entity.Banknote;
 import ru.otus.entity.Cash;
 import ru.otus.entity.Cassette;
 import ru.otus.entity.CellMoney;
-import ru.otus.exception.Myexception;
+import ru.otus.exception.MyException;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class SupportServiceImpl implements SupportService {
     //    @Override
     private CellMoney getCellByBanknoteType(Banknote type, Cassette cassette) {
         return cassette.getCassette().stream().filter(el -> el.getBanknoteType().equals(type))
-                .findFirst().orElseThrow(() -> new Myexception("В ATM нет ячееки для приема этого наминала банкнот: " + type.toString()));
+                .findFirst().orElseThrow(() -> new MyException("В ATM нет ячееки для приема этого наминала банкнот: " + type.toString()));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SupportServiceImpl implements SupportService {
     @Override
     public Cash withdraw(Long expectedAmount, Cassette cassette) {
         if (this.getAvailableAmount(cassette) < expectedAmount) {
-            throw new Myexception("недостаточно средств");
+            throw new MyException("недостаточно средств");
         } else {
             Cash cash = new Cash();
             Map<Banknote, Long> map = cash.getCash();
@@ -69,7 +69,7 @@ public class SupportServiceImpl implements SupportService {
                 }
             }
             if (expectedAmount != 0) {
-                throw new Myexception("Не удалось снять деньги");
+                throw new MyException("Не удалось снять деньги");
             }
             return cash;
         }

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import ru.otus.exception.Myexception;
+import ru.otus.exception.MyException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -32,7 +32,7 @@ public class CellMoney {
 
     public void takeBanknote(Long take) {
         if (count < take) {
-            throw new Myexception("недостаточно банкнот");
+            throw new MyException("недостаточно банкнот");
         } else {
             count = count - take;
         }
