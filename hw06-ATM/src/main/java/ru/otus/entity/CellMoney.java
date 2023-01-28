@@ -13,16 +13,16 @@ import ru.otus.exception.MyException;
 @Setter
 @ToString
 public class CellMoney {
-    final Banknote banknote;
-    Long count;
+    final BanknoteDenomination banknoteDenomination;
+    long count;
 
-    public CellMoney(Banknote banknote) {
-        this.banknote = banknote;
+    public CellMoney(BanknoteDenomination banknoteDenomination) {
+        this.banknoteDenomination = banknoteDenomination;
         this.count = 0L;
     }
 
-    public CellMoney(Banknote banknote, Long count) {
-        this.banknote = banknote;
+    public CellMoney(BanknoteDenomination banknoteDenomination, Long count) {
+        this.banknoteDenomination = banknoteDenomination;
         this.count = count;
     }
 
@@ -38,8 +38,8 @@ public class CellMoney {
         }
     }
 
-    public Banknote getBanknoteType() {
-        return banknote;
+    public BanknoteDenomination getBanknoteType() {
+        return banknoteDenomination;
     }
 
     public Long getCountBanknote() {
@@ -47,6 +47,6 @@ public class CellMoney {
     }
 
     public Long getAvailableAmount() {
-        return banknote.getDenomination() * count;
+        return banknoteDenomination.getDenomination() * count;
     }
 }

@@ -1,6 +1,6 @@
 package ru.otus.entity;
 
-public enum Banknote {
+public enum BanknoteDenomination {
     BANKNOTE10(10),
     BANKNOTE100(100),
     BANKNOTE200(200),
@@ -10,7 +10,7 @@ public enum Banknote {
 
     private final int denomination;
 
-    Banknote(Integer denomination) {
+    BanknoteDenomination(Integer denomination) {
         this.denomination = denomination;
     }
 

@@ -1,11 +1,11 @@
 package ru.otus.service;
 
-import ru.otus.entity.Cash;
+import ru.otus.entity.StackOfBanknotes;
 
 public interface Atm {
     Long getAvailableAmount();
 
-    Cash withdraw(Long expectedAmount);
+    StackOfBanknotes withdraw(Long expectedAmount);
 
-    void deposit(Cash cash);
+    void deposit(StackOfBanknotes stackOfBanknotes);
 }
