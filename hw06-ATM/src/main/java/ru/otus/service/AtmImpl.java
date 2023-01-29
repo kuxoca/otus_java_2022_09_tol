@@ -2,7 +2,6 @@ package ru.otus.service;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ru.otus.entity.BanknoteDenomination;
@@ -17,7 +16,6 @@ import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
-@Setter
 @ToString
 public class AtmImpl implements Atm {
     List<CellMoney> cassette;
@@ -31,7 +29,7 @@ public class AtmImpl implements Atm {
 
     @Override
     public void deposit(StackOfBanknotes stackOfBanknotes) {
-        if (cassette.isEmpty()) {
+        if (cassette == null || cassette.isEmpty()) {
             throw new MyException("В ATM нет ячеек для приема банкнот");
         }
         stackOfBanknotes.getCash().forEach((k, v) ->
