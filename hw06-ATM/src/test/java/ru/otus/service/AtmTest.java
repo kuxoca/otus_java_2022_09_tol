@@ -42,6 +42,24 @@ class AtmTest {
         assertThat(atm.getAvailableAmount()).isEqualTo(1000L);
     }
 
+    @DisplayName("Тест депозита - касета Empty")
+    @Test
+    void deposit4() {
+        Atm atm = new AtmImpl(Collections.emptyList());
+        StackOfBanknotes stackOfBanknotes = new StackOfBanknotes();
+        stackOfBanknotes.setCash(Collections.singletonMap(BanknoteDenomination.BANKNOTE500, 1L));
+        assertThrows(MyException.class, () -> atm.deposit(stackOfBanknotes));
+    }
+
+    @DisplayName("Тест депозита - касета null")
+    @Test
+    void deposit3() {
+        Atm atm = new AtmImpl(null);
+        StackOfBanknotes stackOfBanknotes = new StackOfBanknotes();
+        stackOfBanknotes.setCash(Collections.singletonMap(BanknoteDenomination.BANKNOTE500, 1L));
+        assertThrows(MyException.class, () -> atm.deposit(stackOfBanknotes));
+    }
+
     @DisplayName("Тест депозита - касета не содержить нужные ячейки")
     @Test
     void deposit2() {

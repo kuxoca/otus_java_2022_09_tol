@@ -10,7 +10,6 @@ import ru.otus.exception.MyException;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
-@Setter
 @ToString
 public class CellMoney {
     final BanknoteDenomination banknoteDenomination;
