@@ -11,4 +11,5 @@ include 'hw09-erialization'
 include 'hw09-serialization'
 include 'hw10-JDBC'
 include 'hw11-JPQL'
+include 'hw12-cache'
 
