@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Клиенты</title>
+</head>
+
+<body>
+<h4>Форма добавления клиента</h4>
+<form action="/clients" method="post">
+    <label for="lname">Имя
+        <br>
+        <input type="text" name="name" id="lname">
+        <br>
+    </label>
+
+    <label for="ladress">Адресс
+        <br>
+        <input type="text" name="address" id="ladress">
+        <br>
+    </label>
+
+    <label for="lphone1">Телефон основной (обязательно)
+        <br>
+        <input type="text" name="phone1" id="lphone1">
+        <br>
+    </label>
+
+    <label for="lphone2">Телефон дополнительный (не обязательно)
+        <br>
+        <input type="text" name="phone2" id="lphone2">
+        <br>
+    </label>
+
+    <input type="submit" value="Добапвить клиента">
+</form>
+
+<br>
+<label>
+    API:
+    <a href="/api/v1/clients">/api/v1/clients</a>
+</label>
+<br>
+
+<h4>Список всех клиентов</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">ID</td>
+        <td style="width: 100px">Имя</td>
+        <td style="width: 100px">Адрес</td>
+        <td style="width: 100px">Телефон</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    <#foreach client in clients>
+    <tr>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>${client.address.street}</td>
+        <td>
+            <#foreach phone in client.phones>
+            <p>${phone.number}</p>
+        </#foreach>
+        </td>
+    </tr>
+    </#foreach>
+    </tbody>
+</table>
+</body>
+</html>
