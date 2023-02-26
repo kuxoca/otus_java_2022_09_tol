@@ -1,9 +1,9 @@
 package ru.otus.servlet;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.otus.core.repository.DataTemplateException;
 import ru.otus.crm.model.Address;
 import ru.otus.crm.model.Client;
 import ru.otus.crm.model.Phone;
@@ -43,7 +43,7 @@ public class ClientsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         var param = req.getParameterMap();
 
@@ -64,7 +64,11 @@ public class ClientsServlet extends HttpServlet {
         }
         client.setPhones(phones);
 
-        dbServiceClient.saveClient(client);
+        try {
+            dbServiceClient.saveClient(client);
+        } catch (DataTemplateException e) {
+            log("Ошибка сохранения");
+        }
 
         resp.sendRedirect(TEMPLATE_ATTR_CLIENTS);
     }
