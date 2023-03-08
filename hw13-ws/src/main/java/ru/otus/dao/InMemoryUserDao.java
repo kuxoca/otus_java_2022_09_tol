@@ -13,7 +13,7 @@ public class InMemoryUserDao implements UserDao {
 
     public InMemoryUserDao() {
         users = new HashMap<>();
-        users.put(1L, new User(1L, "Крис Гир", "user1", "11111"));
+        users.put(1L, new User(1L, "Крис Гир",  "user1", "11111"));
         users.put(2L, new User(2L, "Ая Кэш", "user2", "11111"));
         users.put(3L, new User(3L, "Десмин Боргес", "user3", "11111"));
         users.put(4L, new User(4L, "Кетер Донохью", "user4", "11111"));
