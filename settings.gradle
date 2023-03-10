@@ -12,5 +12,5 @@ include 'hw09-serialization'
 include 'hw10-JDBC'
 include 'hw11-JPQL'
 include 'hw12-cache'
+include 'hw13-ws'
 include 'hw14-di'
-
