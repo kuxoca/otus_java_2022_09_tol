@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Клиенты</title>
+</head>
+
+<body>
+<h4>Форма добавления клиента</h4>
+<form action="/clients" method="post">
+    <label th:for="lname">Имя
+        <br>
+        <input th:type="text" th:name="name" th:id="lname">
+        <br>
+    </label>
+
+    <label th:for="ladress">Адресс
+        <br>
+        <input th:type="text" th:name="address" th:id="ladress">
+        <br>
+    </label>
+
+    <label th:for="lphone1">Телефон основной (обязательно)
+        <br>
+        <input th:type="text" th:name="phone1" th:id="lphone1">
+        <br>
+    </label>
+
+    <label th:for="lphone2">Телефон дополнительный (не обязательно)
+        <br>
+        <input th:type="text" th:name="phone2" th:id="lphone2">
+        <br>
+    </label>
+
+    <input type="submit" value="Добапвить клиента">
+</form>
+
+<br>
+<label>
+    API:
+    <a href="/api/v1/clients">/api/v1/clients</a>
+</label>
+<br>
+
+<h4>Список всех клиентов</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">ID</td>
+        <td style="width: 100px">Имя</td>
+        <td style="width: 100px">Адрес</td>
+        <td style="width: 100px">Телефон</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="client: ${clients}">
+        <td th:text="${client.id}" />
+        <td th:text="${client.name}"/>
+        <td th:text="${client.address.street}"/>
+        <td >
+            <ul th:each="phone: ${client.phones}">
+            <li th:text="${phone.number}"> </li>
+            </ul>
+        </td>
+    </tbody>
+</table>
+</body>
+</html>
