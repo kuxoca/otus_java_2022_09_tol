@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class Hw16Executors {
     public static final Logger logger = LoggerFactory.getLogger(Hw16Executors.class);
     private String last = "second";
-    private int number = 1;
+    private final static int number = 10;
     private boolean isUp = true;
 
     public static void main(String[] args) {
@@ -28,14 +28,16 @@ public class Hw16Executors {
 
 
     private synchronized void printNumber(String nameTread) {
-        Hw16Executors hw16Executors = new Hw16Executors();
+        int count = 0;
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 while (last.equals(nameTread)) {
                     this.wait();
                 }
                 last = nameTread;
-                logger.info("{} : number-{}", Thread.currentThread().getName(), hw16Executors.getNumber());
+                count = getNumber(count);
+                logger.info("{} : number-{}", Thread.currentThread().getName(), count);
+
                 sleep();
                 notifyAll();
             } catch (InterruptedException e) {
@@ -44,13 +46,13 @@ public class Hw16Executors {
         }
     }
 
-    public int getNumber() {
-        if (number == 10) {
+    public int getNumber(int inc) {
+        if (inc == number) {
             isUp = false;
-        } else if (number == 1) {
+        } else if (inc == 1) {
             isUp = true;
         }
-        return isUp ? number++ : number--;
+        return isUp ? (inc+1) : (inc-1);
     }
 
     private static void sleep() {
