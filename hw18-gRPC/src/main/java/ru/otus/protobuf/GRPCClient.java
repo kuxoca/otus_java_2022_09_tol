@@ -3,9 +3,9 @@ package ru.otus.protobuf;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.protobuf.generated.Empty;
 import ru.otus.protobuf.generated.IntMessage;
 import ru.otus.protobuf.generated.RemoteServiceGrpc;
+import ru.otus.protobuf.generated.RequestMessage;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +18,7 @@ public class GRPCClient {
     private static final int SERVER_PORT = 8190;
 
     private static long lastFromServer;
-    private static long firstValue = 0;
+    private static long firstValue = 1;
     private static long lastValue = 30;
     private static long currentValue = 0;
 
@@ -27,24 +27,19 @@ public class GRPCClient {
                 .usePlaintext()
                 .build();
 
-        var stub = RemoteServiceGrpc.newBlockingStub(channel);
-
-        var streamInt = stub.getInt(Empty.getDefaultInstance());
-        log.info("Отправлен запрос на сервер!!!");
-
-//        streamInt.forEachRemaining(um -> {
-//                    i = um.getId();
-//                    log.info("CLIENT. get: {}", i);
-//                }
-//        );
         var latch = new CountDownLatch(1);
         var newStub = RemoteServiceGrpc.newStub(channel);
-        newStub.getInt(Empty.getDefaultInstance(), new StreamObserver<IntMessage>() {
+
+        log.info("Отправляется запрос: first {}, last {}", firstValue, lastValue);
+        newStub.getInt(RequestMessage.newBuilder()
+                .setFirst(firstValue)
+                .setLast(lastValue)
+                .build(), new StreamObserver<IntMessage>() {
 
             @Override
             public void onNext(IntMessage value) {
-                lastFromServer = value.getId();
-                log.info("data from server: {}", lastFromServer);
+                setLastFromServer(value.getId());
+                log.info("number from server: {}", lastFromServer);
             }
 
             @Override
@@ -60,16 +55,24 @@ public class GRPCClient {
         });
 
 
-        for (int j = 0; j < 50; j++) {
-            currentValue = currentValue + 1 + lastFromServer;
-            lastFromServer = 0;
-            log.info("count {}", currentValue);
+        for (int j = 0; j <= 50; j++) {
+            currentValue = currentValue + 1 + getLastFromServer();
+            setLastFromServer(0L);
+            log.info("currentValue {}", currentValue);
             sleep();
         }
 
         latch.await();
 
         channel.shutdown();
+    }
+
+    private static synchronized void setLastFromServer(Long number) {
+        lastFromServer = number;
+    }
+
+    private static synchronized Long getLastFromServer() {
+        return lastFromServer;
     }
 
     private static void sleep() {

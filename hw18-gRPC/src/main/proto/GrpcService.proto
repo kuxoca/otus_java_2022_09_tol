@@ -8,9 +8,14 @@ message IntMessage {
   int64 id = 1;
 }
 
+message RequestMessage {
+  int64 first = 1 ;
+  int64 last = 2 ;
+}
+
 message Empty {}
 
 service RemoteService {
-  rpc getInt(Empty) returns (stream  IntMessage);
+  rpc getInt(RequestMessage) returns (stream  IntMessage);
   //    rpc findAllUsers(Empty) returns (stream UserMessage);
 }
