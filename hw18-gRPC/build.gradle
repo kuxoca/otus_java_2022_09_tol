@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id "com.google.protobuf" version "0.8.16"
     id 'idea'
+    id 'com.github.johnrengelman.shadow'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -64,6 +65,24 @@ protobuf {
     generatedFilesBaseDir = filesBaseDir
     generateProtoTasks {
         ofSourceSet('main')*.plugins { grpc {} }
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('GRPCServer')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.otus.protobuf.GRPCServer'
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('GRPCClient')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.otus.protobuf.GRPCClient'
     }
 }
 

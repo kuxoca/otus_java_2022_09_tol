@@ -3,8 +3,8 @@ package ru.otus.protobuf;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.protobuf.generated.IntMessage;
-import ru.otus.protobuf.generated.RemoteServiceGrpc;
+import ru.otus.protobuf.generated.NumberGeneratorServiceGrpc;
+import ru.otus.protobuf.generated.NumberMessage;
 import ru.otus.protobuf.generated.RequestMessage;
 
 import java.util.concurrent.CountDownLatch;
@@ -28,16 +28,16 @@ public class GRPCClient {
                 .build();
 
         var latch = new CountDownLatch(1);
-        var newStub = RemoteServiceGrpc.newStub(channel);
+        var newStub = NumberGeneratorServiceGrpc.newStub(channel);
 
         log.info("Отправляется запрос: first {}, last {}", firstValue, lastValue);
-        newStub.getInt(RequestMessage.newBuilder()
+        newStub.getNumberRequest(RequestMessage.newBuilder()
                 .setFirst(firstValue)
                 .setLast(lastValue)
-                .build(), new StreamObserver<IntMessage>() {
+                .build(), new StreamObserver<>() {
 
             @Override
-            public void onNext(IntMessage value) {
+            public void onNext(NumberMessage value) {
                 setLastFromServer(value.getId());
                 log.info("number from server: {}", lastFromServer);
             }
@@ -56,8 +56,7 @@ public class GRPCClient {
 
 
         for (int j = 0; j <= 50; j++) {
-            currentValue = currentValue + 1 + getLastFromServer();
-            setLastFromServer(0L);
+            currentValue = currentValue + 1 + getLastFromServerAndReset();
             log.info("currentValue {}", currentValue);
             sleep();
         }
@@ -71,8 +70,10 @@ public class GRPCClient {
         lastFromServer = number;
     }
 
-    private static synchronized Long getLastFromServer() {
-        return lastFromServer;
+    private static synchronized Long getLastFromServerAndReset() {
+        var last = lastFromServer;
+        lastFromServer = 0;
+        return last;
     }
 
     private static void sleep() {

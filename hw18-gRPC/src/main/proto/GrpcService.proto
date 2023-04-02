@@ -4,7 +4,7 @@ package ru.otus.protobuf.generated;
 
 option java_multiple_files = true;
 
-message IntMessage {
+message NumberMessage {
   int64 id = 1;
 }
 
@@ -15,7 +15,7 @@ message RequestMessage {
 
 message Empty {}
 
-service RemoteService {
-  rpc getInt(RequestMessage) returns (stream  IntMessage);
+service NumberGeneratorService {
+  rpc getNumberRequest(RequestMessage) returns (stream  NumberMessage);
   //    rpc findAllUsers(Empty) returns (stream UserMessage);
 }
