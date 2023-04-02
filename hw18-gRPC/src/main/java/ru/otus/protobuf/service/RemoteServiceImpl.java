@@ -14,12 +14,12 @@ public class RemoteServiceImpl extends RemoteServiceGrpc.RemoteServiceImplBase {
     public void getInt(Empty request, StreamObserver<IntMessage> responseObserver) {
         for (long i = 1; i <= 30; i++) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             responseObserver.onNext(IntMessage.newBuilder().setId(i).build());
-            log.info("SERVER. send {}", i);
+            log.info("SERVER. send: {}", i);
         }
 
         responseObserver.onCompleted();
