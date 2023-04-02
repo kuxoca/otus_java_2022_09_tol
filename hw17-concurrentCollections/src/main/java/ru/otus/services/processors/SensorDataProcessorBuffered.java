@@ -31,6 +31,7 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
         if (dataBuffer.size() >= bufferSize) {
             flush();
         }
+        dataBuffer.add(data);
     }
 
     public void flush() {
