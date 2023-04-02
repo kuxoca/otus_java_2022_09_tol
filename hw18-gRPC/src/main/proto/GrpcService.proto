@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ru.otus.protobuf.generated;
+
+option java_multiple_files = true;
+
+message IntMessage {
+  int64 id = 1;
+}
+
+message Empty {}
+
+service RemoteService {
+  rpc getInt(Empty) returns (stream  IntMessage);
+  //    rpc findAllUsers(Empty) returns (stream UserMessage);
+}
