@@ -18,3 +18,6 @@ include 'hw15-datajdbc'
 include 'hw16-executors'
 include 'hw17-concurrentCollections'
 include 'hw18-gRPC'
+include 'hw19-chat:client-service'
+include 'hw19-chat:datastore-service'
+
