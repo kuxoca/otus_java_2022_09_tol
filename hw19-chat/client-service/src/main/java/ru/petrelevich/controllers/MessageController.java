@@ -23,6 +23,8 @@ public class MessageController {
 
     private static final String TOPIC_TEMPLATE = "/topic/response.";
 
+    private static final String ROOM = "1408";
+
     private final WebClient datastoreClient;
     private final SimpMessagingTemplate template;
 
@@ -34,11 +36,18 @@ public class MessageController {
     @MessageMapping("/message.{roomId}")
     public void getMessage(@DestinationVariable String roomId, Message message) {
         logger.info("get message:{}, roomId:{}", message, roomId);
-        saveMessage(roomId, message)
-                .subscribe(msgId -> logger.info("message send id:{}", msgId));
 
-        template.convertAndSend(String.format("%s%s", TOPIC_TEMPLATE, roomId),
-                new Message(HtmlUtils.htmlEscape(message.messageStr())));
+        if (!roomId.equals(ROOM)) {
+            saveMessage(roomId, message)
+                    .subscribe(msgId -> logger.info("message send id:{}", msgId));
+
+            template.convertAndSend(String.format("%s%s", TOPIC_TEMPLATE, roomId),
+                    new Message(HtmlUtils.htmlEscape(message.messageStr())));
+
+            template.convertAndSend(String.format("%s%s", TOPIC_TEMPLATE, ROOM),
+                    new Message(HtmlUtils.htmlEscape("message from room " + roomId + ": " + message.messageStr())));
+
+        }
     }
 
 
@@ -52,9 +61,15 @@ public class MessageController {
         }
         var roomId = parseRoomId(simpDestination);
 
-        getMessagesByRoomId(roomId)
-                .doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
-                .subscribe(message -> template.convertAndSend(simpDestination, message));
+        if (!String.valueOf(roomId).equals(ROOM)) {
+            getMessagesByRoomId(roomId)
+                    .doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
+                    .subscribe(message -> template.convertAndSend(simpDestination, message));
+        } else {
+            getAllMessages()
+                    .doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
+                    .subscribe(message -> template.convertAndSend(simpDestination, message));
+        }
     }
 
     private long parseRoomId(String simpDestination) {
@@ -75,6 +90,18 @@ public class MessageController {
 
     private Flux<Message> getMessagesByRoomId(long roomId) {
         return datastoreClient.get().uri(String.format("/msg/%s", roomId))
+                .accept(MediaType.APPLICATION_NDJSON)
+                .exchangeToFlux(response -> {
+                    if (response.statusCode().equals(HttpStatus.OK)) {
+                        return response.bodyToFlux(Message.class);
+                    } else {
+                        return response.createException().flatMapMany(Mono::error);
+                    }
+                });
+    }
+
+    private Flux<Message> getAllMessages() {
+        return datastoreClient.get().uri("/msg/all")
                 .accept(MediaType.APPLICATION_NDJSON)
                 .exchangeToFlux(response -> {
                     if (response.statusCode().equals(HttpStatus.OK)) {
